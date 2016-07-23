@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
         CHEF_LOG(info) << "< init log.";
 
         auto server = std::make_shared<chat_server>(num_of_threads);
-        if (!server->start("127.0.0.1", port)) {
+        if (!server->start("0.0.0.0", port)) {
             CHEF_LOG(fatal) << "start server fail,bye.";
             return 1;
         }

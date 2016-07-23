@@ -1,3 +1,9 @@
+build/client_benchmark/client_benchmark
+build/client_stdin/client_stdin
+build/server1/server1
+build/server2/server2
+build/server3/server3
+
 *.log.chef
 
 ##### c/c++/golang #####
@@ -53,4 +59,3 @@ npm-debug.log
 ._Store
 
 .TODO
-./dump
