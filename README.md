@@ -36,7 +36,7 @@ Leader-Follower. Only one io service. All threads are io threads.
 
 ### server3
 
-Multi io service. One loop peer thread.
+Multi io service. One loop per thread.
 
 ### client_stdin
 
