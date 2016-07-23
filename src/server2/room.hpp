@@ -31,6 +31,7 @@ public:
         participants_.erase(participant);
     }
 
+    /// all sender maintain one msg memory
     void deliver(chat_message_ptr msg) {
         std::lock_guard<std::mutex> guard(room_mutex_);
         recent_msgs_.push_back(msg);

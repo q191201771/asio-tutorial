@@ -29,6 +29,7 @@ public:
         participants_.erase(participant);
     }
 
+    /// all sender maintain one msg memory
     void deliver(chat_message_ptr msg) {
         recent_msgs_.push_back(msg);
         while(recent_msgs_.size() > MAX_RECENT_MSGS) {

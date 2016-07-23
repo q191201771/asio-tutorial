@@ -22,9 +22,11 @@ asio的几种常见用法，我们的目标是没有蛀～呸呸呸～是正确�
 
 ### Worth mentioning
 
-* O(n*n)的转发量，注意点不要爆内存了～如果程序被Killed了，可以dmesg确认下是不是爆内存被kernel干了～
+* O(n*n)的转发量（尽管转发n的时候是maintain同一份内存，但是client不收堵在kernel各自的tcp sendbuf也只能摊手～），注意点不要爆内存了～如果程序被Killed了，可以dmesg确认下是不是爆内存被kernel干了～
 
 * statistics类为了通用使用了atomic，在server1中是非必须的，其他所有的锁及位置都是一个不多，一个不少 :)
+
+* 精准控制所有的对象及buffer的生命周期管理，不早不晚～
 
 ### server1
 
