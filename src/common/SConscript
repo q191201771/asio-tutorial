@@ -1,0 +1,7 @@
+Import('env')
+
+objs = []
+objs += env.Object('chef_log', ['chef_log.cc'])
+objs += env.Object('statistics', ['statistics.cc'])
+
+Return('objs')

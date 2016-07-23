@@ -1,0 +1,24 @@
+import os, sys, commands
+
+Import('env')
+Import('platform_libs')
+Import('boost_path')
+
+all_libs = []
+all_libs += [platform_libs]
+all_libs += [File(os.path.join(boost_path, 'libboost_log_setup.a'))]
+all_libs += [File(os.path.join(boost_path, 'libboost_log.a'))]
+all_libs += [File(os.path.join(boost_path, 'libboost_thread.a'))]
+all_libs += [File(os.path.join(boost_path, 'libboost_system.a'))]
+all_libs += [File(os.path.join(boost_path, 'libboost_filesystem.a'))]
+all_libs += [File(os.path.join(boost_path, 'libboost_timer.a'))]
+all_libs += [File(os.path.join(boost_path, 'libboost_date_time.a'))]
+
+sources = []
+sources += Glob('*.cc')
+sources += ['../common/chef_log.o']
+sources += ['../common/statistics.o']
+
+prgs = []
+prgs += env.Program('server1', sources, LIBS = all_libs)
+Return('prgs')
