@@ -60,7 +60,6 @@ public:
         return ios;
     }
 
-    /// for test
     boost::asio::io_service &fetch(uint32_t index) {
         assert(index <= size_);
         boost::asio::io_service &ios = *(io_service_pool_[index]);
