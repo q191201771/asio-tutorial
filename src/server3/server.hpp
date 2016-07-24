@@ -14,9 +14,9 @@ class chat_server
 public:
     chat_server(uint16_t num_of_threads)
         : io_service_pool_(num_of_threads)
-        , signals_(io_service_pool_.fetch())
-        , acceptor_(io_service_pool_.fetch())
-        , timer_(io_service_pool_.fetch())
+        , signals_(io_service_pool_.fetch(0))
+        , acceptor_(io_service_pool_.fetch(0))
+        , timer_(io_service_pool_.fetch(0))
         , timer_tick_(0)
         , new_session_()
     {
@@ -56,18 +56,21 @@ public:
         return true;
     }
 
+    /// non-block func
     void run() {
         io_service_pool_.run();
     }
 
     void stop() {
         io_service_pool_.stop();
+        io_service_pool_.join();
     }
 
 private:
     void signal_handler() {
-        CHEF_LOG(info) << "recv signal,> chat_server stop.";
-        stop();
+        CHEF_LOG(info) << "recv signal,> stop acceptor and timer.";
+        acceptor_.close();
+        timer_.cancel();
     }
 
     void do_timer() {
@@ -101,8 +104,11 @@ private:
         acceptor_.async_accept(
             new_session_->socket(),
             [this, self](boost::system::error_code ec) {
-                /// maybe error::no_descriptors
+                /// maybe error bad_descriptor or no_descriptors
                 if (ec) {
+                    if (ec == boost::asio::error::bad_descriptor) {
+                        return;
+                    }
                     CHEF_LOG(fatal) << "accept handler ec: " << ec.message();
                     room_.dump();
                 } else {

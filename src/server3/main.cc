@@ -23,10 +23,15 @@ int main(int argc, char *argv[]) {
 
         CHEF_LOG(info) << "> run server.";
         server->run();
+        while(server.use_count() != 1) {
+            sleep(1);
+        }
+        /// Oops,I'm chat_server's last maintainer. time to stop server~
+        CHEF_LOG(info) << "> stop server.";
+        server->stop();
     } catch(std::exception e) {
         std::cerr << "Exception: " << e.what() << "\n";
     }
-
     CHEF_LOG(info) << "bye.";
     return 0;
 }

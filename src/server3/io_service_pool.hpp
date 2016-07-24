@@ -24,25 +24,29 @@ public:
     io_service_pool(const io_service_pool &)            = delete;
     io_service_pool &operator=(const io_service_pool &) = delete;
 
-    /// block func
+    /// non-block func
     void run() {
-        std::vector<thread_ptr> threads;
         for (uint32_t i = 0; i < size_; i++) {
             auto ios = io_service_pool_[i];
             auto t = std::make_shared<std::thread>([ios]() {
                 ios->run();
             });
-            threads.push_back(t);
+            thread_pool_.push_back(t);
         }
         CHEF_LOG(info) << "io threads running.";
-        for (uint32_t i = 0; i < size_; i++) {
-            threads[i]->join();
+    }
+
+    void join() {
+        uint32_t size = thread_pool_.size();
+        for (uint32_t i = 0; i < size; i++) {
+            thread_pool_[i]->join();
             CHEF_LOG(info) << "< thread " << i << " done.";
         }
     }
 
     void stop() {
-        for (uint32_t i = 0; i < size_; i++) {
+        uint32_t size = thread_pool_.size();
+        for (uint32_t i = 0; i < size; i++) {
             io_service_pool_[i]->stop();
         }
     }
@@ -73,6 +77,8 @@ private:
 
     /// ensure ios'run() function will not exit while work is underway
     std::vector<io_work_ptr>    io_work_pool_;
+
+    std::vector<thread_ptr>     thread_pool_;
 
     uint32_t                    index_;
 };

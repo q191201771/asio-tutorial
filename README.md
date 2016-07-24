@@ -22,11 +22,13 @@ asio的几种常见用法，我们的目标是没有蛀～呸呸呸～是正确�
 
 ### Worth mentioning
 
-* O(n*n)的转发量（尽管转发n的时候是maintain同一份内存，但是client不收堵在kernel各自的tcp sendbuf也只能摊手～），注意点不要爆内存了～如果程序被Killed了，可以dmesg确认下是不是爆内存被kernel干了～
+* O(n*n)的转发量（尽管转发n的时候优化为maintain同一份内存，但是client不收堵在kernel各自的tcp sendbuf也只能摊手～），注意点不要爆内存了～如果程序被Killed了，可以dmesg确认下是不是爆内存被kernel干了～
 
 * statistics类为了通用使用了atomic，在server1中是非必须的，其他所有的锁及位置都是一个不多，一个不少 :)
 
-* 精准控制所有的对象及buffer的生命周期管理，不早不晚～
+* 精准控制所有对象及buffer的生命周期管理，不早不晚～
+
+* 接收结束信号后优雅的释放所有资源再退出程序，从此跑valgrind定位义务层内存泄漏so easy了有木有
 
 ### server1
 
@@ -83,4 +85,3 @@ $ cd build/client_benchmark && ./client_benchmark 127.0.0.1 5566 512
 
 ### TODO
 
-server3在进程结束时，没有完整释放所有资源

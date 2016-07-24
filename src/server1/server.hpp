@@ -73,7 +73,7 @@ private:
         acceptor_.async_accept(
             socket_,
             [this, self](boost::system::error_code ec) {
-                /// maybe error::no_descriptors
+                /// maybe error bad_descriptor or no_descriptors
                 if (ec) {
                     CHEF_LOG(fatal) << "accept_handler ec: " << ec.message();
                     room_.dump();
